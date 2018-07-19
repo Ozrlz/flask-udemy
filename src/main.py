@@ -29,13 +29,16 @@ def my_decorator(func):
         print("After the decorator")
     return function_that_runs_fun
 
-def dumb_decorator(callback):
-    @functools.wraps(callback)
-    def do_nothing():
-        pass
-    return do_nothing
-
-@dumb_decorator
+def decorator_with_arguments(number):
+    def inner_decorator(func):
+        @functools.wraps(func)
+        def func_returning_func():
+            print("In the decorator")
+            func()
+            print("After the decorator")
+        return func_returning_func
+    return inner_decorator
+@decorator_with_arguments(56)
 def my_function():
     print ("Main func")
 
