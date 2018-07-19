@@ -1,6 +1,6 @@
 FROM python:3.6.5
 
-ADD ./src /home/app
+RUN mkdir /home/app
 
 WORKDIR /home/app
 
