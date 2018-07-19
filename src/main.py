@@ -18,8 +18,26 @@ class Student:
         print ("This is a static method")
 
 
-anna = Student('Anna', 'MIT')
-ozrlz = Student('ozrlz', 'UDG')
+import functools
 
-ozrlz.class_method()
-Student.static_method()
+
+def my_decorator(func):
+    @functools.wraps(func)
+    def function_that_runs_fun():
+        print ("In the decorator!")
+        func()
+        print("After the decorator")
+    return function_that_runs_fun
+
+def dumb_decorator(callback):
+    @functools.wraps(callback)
+    def do_nothing():
+        pass
+    return do_nothing
+
+@dumb_decorator
+def my_function():
+    print ("Main func")
+
+
+my_function()
