@@ -49,12 +49,12 @@ def get_stores():
 
 
 # POST /store/<string:name>/item {name:, price:}
-@app.route('/store/<string:name>/item')
+@app.route('/store/<string:name>/item', methods=['POST'])
 def create_item_in_store(name):
     request_data = request.get_json()
     for store in stores:
         if store.get('name') == name:
-            debug()
+            # debug()
             store.get('items').append(request_data)
             # return jsonify({'message': 'The items were pushed xd'})
             return jsonify(request_data)
