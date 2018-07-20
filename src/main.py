@@ -1,6 +1,6 @@
 from os import environ
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from pdb import set_trace as debug
 
 FLASK_PORT = environ.get('FLASK_PORT')
@@ -68,6 +68,10 @@ def get_items_in_store(name):
         if store.get('name') == name:
             return jsonify({'items': store.get('items')})
     return jsonify({'message': 'The store was not found ):'})
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
