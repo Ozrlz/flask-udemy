@@ -1,9 +1,21 @@
 from os import environ
 
-from flask import Flask
+from flask import Flask, jsonify
 
 FLASK_PORT = environ.get('FLASK_PORT')
+
 app = Flask(__name__)
+stores = [
+    {
+        'name': 'My store xd',
+        'items': [
+            {
+                'name': 'My item',
+                'price': 15.99
+            }
+        ]
+    }
+]
 
 # PORT - To retrieve data
 # GET - to send data back only
@@ -22,7 +34,9 @@ def get_store(name): # The parameter must match the name on the decorator
 # GET /store
 @app.route('/store')
 def get_stores():
-    pass
+    return jsonify({
+        'stores': stores
+    })
 
 
 # POST /store/<string:name>/item {name:, price:}
