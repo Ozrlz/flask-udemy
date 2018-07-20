@@ -1,46 +1,12 @@
-class Student:
-    def __init__(self, name, school):
-        self.name = name
-        self.school = school
-        self.marks = []
+from os import environ
 
-    def average(self):
-        return sum(self.marks) / len(self.marks)
+from flask import Flask
 
-    @classmethod
-    def class_method(cls):
-        print ("This is a class method")
+app = Flask(__name__)
+FLASK_PORT = environ.get('FLASK_PORT')
 
-        print ("I'm a {}".format(cls))
+@app.route('/')
+def home():
+    return "Hello world!"
 
-    @staticmethod
-    def static_method():
-        print ("This is a static method")
-
-
-import functools
-
-
-def my_decorator(func):
-    @functools.wraps(func)
-    def function_that_runs_fun():
-        print ("In the decorator!")
-        func()
-        print("After the decorator")
-    return function_that_runs_fun
-
-def decorator_with_arguments(number):
-    def inner_decorator(func):
-        @functools.wraps(func)
-        def func_returning_func():
-            print("In the decorator")
-            func()
-            print("After the decorator")
-        return func_returning_func
-    return inner_decorator
-@decorator_with_arguments(56)
-def my_function():
-    print ("Main func")
-
-
-my_function()
+app.run(port=FLASK_PORT, host='0.0.0.0')
