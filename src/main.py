@@ -14,12 +14,13 @@ items = []
 class Item(Resource):
 
     def get(self, name):
-        for item in items:
-            if item.get('name') == name:
-                return item
-        return {'message': 'item not found u.u'}, 404
+        item = next(filter(lambda x: x.get('name') == name, items), None)
+        return {'item': item}, 200 if item else 404
 
     def post(self, name):
+        if next(filter(lambda x: x.get('name') == name, items), None):
+            return {"message": "An item with the name {} already exists".format(name)}, 400
+            
         # Fails if does not have a payload or the ContentType header is not set
         # Can be bypassed with the force flag, but always executes it
         # Also, the silent flag can help not to rise an error
