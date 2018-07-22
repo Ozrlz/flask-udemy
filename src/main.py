@@ -7,6 +7,7 @@ from pdb import set_trace as debug
 FLASK_PORT = environ.get('FLASK_PORT')
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
 api = Api(app)
 
 items = []
