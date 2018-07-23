@@ -1,5 +1,6 @@
-from werkzeug.security import safe_str_cpm
+from werkzeug.security import safe_str_cmp
 from user import User
+from pdb import set_trace as debug
 
 users = [
     User(1, 'bob', 'asd')
@@ -10,7 +11,7 @@ userid_mapping = {u.id: u for u in users}
 
 def authenticate(username, passwd):
     user = username_mapping.get(username, None)
-    if user and safe_str_cpm(user.passwd, passwd):
+    if user and safe_str_cmp(user.passwd, passwd):
         return user
 
 def identity(payload):
