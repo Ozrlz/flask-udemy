@@ -1,7 +1,7 @@
 from os import environ
 
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from pdb import set_trace as debug
 from flask_jwt import JWT, jwt_required
 
@@ -41,7 +41,14 @@ class Item(Resource):
         return {'message': 'Item deleted'}
 
     def put(self, name):
-        payload = request.get_json()
+        parser = reqparse.RequestParser()
+        parser.add_argument('price',
+            type=float,
+            required=True,
+            help="This cannot be left blank!"
+        )
+        debug()
+        payload = parser.parse_args()
         item = next(filter(lambda x: x.get('name') == name, items), None)
         if item is None:
             item = {
