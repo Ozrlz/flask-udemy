@@ -18,6 +18,13 @@ items = []
 
 class Item(Resource):
 
+    parser = reqparse.RequestParser()
+    parser.add_argument('price',
+        type=float,
+        required=True,
+        help="This field cannot be left blank!"
+    )
+
     @jwt_required()
     def get(self, name):
         item = next(filter(lambda x: x.get('name') == name, items), None)
@@ -30,7 +37,9 @@ class Item(Resource):
         # Fails if does not have a payload or the ContentType header is not set
         # Can be bypassed with the force flag, but always executes it
         # Also, the silent flag can help not to rise an error
-        payload = request.get_json(silent=True)
+        
+        payload = Item.parser.parse_args()
+        
         item = {'name': name, 'price': payload.get('price')}
         items.append(item)
         return item, 201
@@ -41,13 +50,7 @@ class Item(Resource):
         return {'message': 'Item deleted'}
 
     def put(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument('price',
-            type=float,
-            required=True,
-            help="This cannot be left blank!"
-        )
-        payload = parser.parse_args()
+        payload = Item.parser.parse_args()
         item = next(filter(lambda x: x.get('name') == name, items), None)
         if item is None:
             item = {
