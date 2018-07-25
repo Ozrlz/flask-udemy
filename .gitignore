@@ -3,3 +3,6 @@
 
 # Ignore all pyc stuff
 *.pyc
+
+# Ignore all possible sqlite databases 
+*.db
