@@ -6,6 +6,7 @@ from pdb import set_trace as debug
 from flask_jwt import JWT, jwt_required
 
 from security import authenticate, identity
+from user import UserRegister
 FLASK_PORT = environ.get('FLASK_PORT')
 
 app = Flask(__name__)
@@ -33,10 +34,6 @@ class Item(Resource):
     def post(self, name):
         if next(filter(lambda x: x.get('name') == name, items), None):
             return {"message": "An item with the name {} already exists".format(name)}, 400
-            
-        # Fails if does not have a payload or the ContentType header is not set
-        # Can be bypassed with the force flag, but always executes it
-        # Also, the silent flag can help not to rise an error
         
         payload = Item.parser.parse_args()
         
@@ -71,4 +68,5 @@ class ItemList(Resource):
 if __name__ == '__main__':
     api.add_resource(Item, '/item/<string:name>')
     api.add_resource(ItemList, '/items')
+    api.add_resource(UserRegister, '/register')
     app.run(port=FLASK_PORT, host='0.0.0.0', debug=True)
