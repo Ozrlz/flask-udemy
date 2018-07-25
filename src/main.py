@@ -47,7 +47,6 @@ class Item(Resource):
             required=True,
             help="This cannot be left blank!"
         )
-        debug()
         payload = parser.parse_args()
         item = next(filter(lambda x: x.get('name') == name, items), None)
         if item is None:
