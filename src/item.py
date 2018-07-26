@@ -50,11 +50,28 @@ class Item(Resource):
 
     @classmethod
     def insert(cls, item):
+        '''
+        Args:
+            cls -> The current class
+            item -> Dictionary with name and price keys'''
         con = sqlite3.connect(DATABASE_NAME)
         cr = con.cursor()
         query = "INSERT INTO items VALUES (?,?)"
         cr.execute(query, (item.get('name'), item.get('price')))
 
+        con.commit()
+        con.close()
+
+    @classmethod
+    def update(cls, item):
+        '''
+        Args:
+            cls -> The current class
+            item -> Dictionary with name and price keys'''
+        con = sqlite3.connect(DATABASE_NAME)
+        cr = con.cursor()
+        query = "UPDATE items SET price = ? WHERE name = ?"
+        cr.execute(query, (item.get('price'), item.get('name')) )
         con.commit()
         con.close()
 
@@ -73,16 +90,23 @@ class Item(Resource):
 
     def put(self, name):
         payload = Item.parser.parse_args()
-        item = next(filter(lambda x: x.get('name') == name, items), None)
+        item = Item.find_by_name(name)
+        updated_item = {
+            'name': name,
+            'price': payload.get('price')
+        }
         if item is None:
-            item = {
-                'name': name,
-                'price': payload.get('price')
-            }
-            items.append(item)
+            try:
+                Item.insert(updated_item)
+            except:
+                return {"message": "An error ocurred while inserting the item"}, 500
         else:
-            item.update(payload)
-        return item
+            try:
+                Item.update(updated_item)
+            except:
+                return {"message": "An error ocurred while updating the item"}, 500
+
+        return updated_item
 
 
 class ItemList(Resource):
