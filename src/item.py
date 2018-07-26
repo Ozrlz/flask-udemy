@@ -54,8 +54,15 @@ class Item(Resource):
         return item, 201
 
     def delete(self, name):
-        items=[]
-        items = list(filter(lambda x: x.get('name') != name, items))
+        if Item.find_by_name(name) is None:
+            return {'message': 'Item with name {} not found'.format(name)}, 400
+        con = sqlite3.connect(DATABASE_NAME)
+        cr = con.cursor()
+
+        query = "DELETE FROM items WHERE name = ?"
+        cr.execute(query, (name,))
+        con.commit()
+        con.close()
         return {'message': 'Item deleted'}
 
     def put(self, name):
