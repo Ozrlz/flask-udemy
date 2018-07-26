@@ -40,9 +40,16 @@ class Item(Resource):
             return {"message": "An item with the name {} already exists".format(name)}, 400
         
         payload = Item.parser.parse_args()
-        
         item = {'name': name, 'price': payload.get('price')}
+        try:
+            Item.insert(item)        
+        except:
+            return {"message": "An error ocurred while inserting the item"}, 500
         
+        return item, 201
+
+    @classmethod
+    def insert(cls, item):
         con = sqlite3.connect(DATABASE_NAME)
         cr = con.cursor()
         query = "INSERT INTO items VALUES (?,?)"
@@ -51,7 +58,6 @@ class Item(Resource):
         con.commit()
         con.close()
 
-        return item, 201
 
     def delete(self, name):
         if Item.find_by_name(name) is None:
