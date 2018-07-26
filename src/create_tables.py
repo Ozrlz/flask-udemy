@@ -12,8 +12,6 @@ cr.execute(create_table_users_query)
 
 create_table_items_query = "CREATE TABLE IF NOT EXISTS items (name text, price real)"
 cr.execute(create_table_items_query)
-cr.execute('INSERT INTO items VALUES (?,?)', ('piano', 10.021))
-
 
 con.commit()
 con.close()
