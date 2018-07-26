@@ -54,14 +54,16 @@ class UserRegister(Resource):
 
     @classmethod
     def post(cls):
+        payload = cls.parser.parse_args()
+        if User.find_by_username(payload.get('username')):
+            return {"message": "A user with name {} already exists".format(payload.get('username'))}
         con = sqlite3.connect(DATABASE_NAME)
         cr = con.cursor()
 
         query = "INSERT INTO users VALUES (NULL, ?, ?)"
-        payload = cls.parser.parse_args()
         cr.execute(query, (payload.get('username'), payload.get('password')))
         
         con.commit()
         con.close()
 
-        return {"message": "User created"}, 201
+        return {"message": "User created"}
