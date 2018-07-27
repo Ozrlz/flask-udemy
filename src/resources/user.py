@@ -4,40 +4,9 @@ from os import environ
 from flask_restful import Resource, reqparse
 from pdb import set_trace as debug
 
+from models.user import UserModel
+
 DATABASE_NAME = environ.get('DATABASE_NAME')
-
-class User:
-    def __init__(self, _id, username, passwd):
-        self.id = _id
-        self.username = username
-        self.passwd = passwd
-
-    @classmethod
-    def find_by_username(cls, username):
-        connection = sqlite3.connect(DATABASE_NAME)
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM users WHERE username = ?"
-        result = cursor.execute(query, (username,) )
-        row = result.fetchone()
-        user = cls(*row) if row else None
-        
-        connection.close()
-
-        return user
-
-    @classmethod
-    def find_by_id(cls, _id):
-        connection = sqlite3.connect(DATABASE_NAME)
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM users WHERE id = ?"
-        result = cursor.execute(query, (_id,))
-        row = result.fetchone()
-        user = cls(*row) if row else None
-
-        connection.close()
-        return user
 
 class UserRegister(Resource):
     parser = reqparse.RequestParser()
@@ -55,7 +24,7 @@ class UserRegister(Resource):
     @classmethod
     def post(cls):
         payload = cls.parser.parse_args()
-        if User.find_by_username(payload.get('username')):
+        if UserModel.find_by_username(payload.get('username')):
             return {"message": "A user with name {} already exists".format(payload.get('username'))}
         con = sqlite3.connect(DATABASE_NAME)
         cr = con.cursor()
