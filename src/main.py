@@ -6,8 +6,8 @@ from pdb import set_trace as debug
 from flask_jwt import JWT
 
 from security import authenticate, identity
-from user import UserRegister
-from item import Item, ItemList
+from resources.user import UserRegister
+from resources.item import Item, ItemList
 FLASK_PORT = environ.get('FLASK_PORT')
 
 app = Flask(__name__)
