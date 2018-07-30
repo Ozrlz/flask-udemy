@@ -29,40 +29,30 @@ class Item(Resource):
         payload = Item.parser.parse_args()
         item = ItemModel(name, payload.get('price') )
         try:
-            item.insert()
+            item.save_to_db()
         except:
             return {"message": "An error ocurred while inserting the item"}, 500
         
         return item.json(), 201
     
     def delete(self, name):
-        if ItemModel.find_by_name(name) is None:
+        item = ItemModel.find_by_name(name)
+        if item is None:
             return {'message': 'Item with name {} not found'.format(name)}, 400
-        con = sqlite3.connect(DATABASE_NAME)
-        cr = con.cursor()
-
-        query = "DELETE FROM items WHERE name = ?"
-        cr.execute(query, (name,))
-        con.commit()
-        con.close()
+        item.delete_from_db()
         return {'message': 'Item deleted'}
 
     def put(self, name):
         payload = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
-        updated_item = ItemModel(name,payload.get('price'))
         if item is None:
-            try:
-                updated_item.insert()
-            except:
-                return {"message": "An error ocurred while inserting the item"}, 500
+            item = ItemModel(name, payload.get('price'))
         else:
-            try:
-                updated_item.update()
-            except:
-                return {"message": "An error ocurred while updating the item"}, 500
+            item.price = payload.get('price')
 
-        return updated_item.json()
+        item.save_to_db()
+
+        return item.json()
 
 
 class ItemList(Resource):

@@ -8,9 +8,12 @@ from flask_jwt import JWT
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList
+
 FLASK_PORT = environ.get('FLASK_PORT')
+DATABASE_NAME = environ.get('DATABASE_NAME')
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DATABASE_NAME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super_secret_key'
 api = Api(app)
