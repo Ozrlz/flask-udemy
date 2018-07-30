@@ -1,9 +1,16 @@
 from os import environ
 import sqlite3
+from db import db
 
 DATABASE_NAME = environ.get('DATABASE_NAME')  
 
-class UserModel:
+class UserModel(db.Model):
+    __tablename__ = 'users'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80)) # 80 Chars at most
+    passwd = db.Column(db.String(80))
+
     def __init__(self, _id, username, passwd):
         self.id = _id
         self.username = username
