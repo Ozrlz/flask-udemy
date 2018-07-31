@@ -7,9 +7,9 @@ class UserModel(db.Model):
     username = db.Column(db.String(80)) # 80 Chars at most
     password = db.Column(db.String(80))
 
-    def __init__(self, username, passwd):
+    def __init__(self, username, password):
         self.username = username
-        self.password = passwd
+        self.password = password
 
     def save_to_db(self):
         db.session.add(self)
