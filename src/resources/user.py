@@ -1,12 +1,7 @@
-import sqlite3
-from os import environ
-
 from flask_restful import Resource, reqparse
 from pdb import set_trace as debug
 
 from models.user import UserModel
-
-DATABASE_NAME = environ.get('DATABASE_NAME')
 
 class UserRegister(Resource):
     parser = reqparse.RequestParser()
