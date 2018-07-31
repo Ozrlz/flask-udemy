@@ -20,6 +20,8 @@ class Store(Resource):
         except:
             return {'message': 'An error ocurred while creating the store ):'}
 
+        return store.json()
+
     def delete(self, name):
         store = StoreModel.find_by_name(name)
         if store:
@@ -31,4 +33,4 @@ class Store(Resource):
 class StoreList(Resource):
     
     def get(self):
-        return {'stores': [store for store in StoreModel.query.all()]}
+        return {'stores': [store.json() for store in StoreModel.query.all()]}
