@@ -1,12 +1,7 @@
-from os import environ
-import sqlite3
 from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 
 from models.item import ItemModel
-
-DATABASE_NAME = environ.get('DATABASE_NAME')
-
 
 class Item(Resource):
 
@@ -58,18 +53,4 @@ class Item(Resource):
 class ItemList(Resource):
     
     def get(self):
-        con = sqlite3.connect(DATABASE_NAME)
-        cr = con.cursor()
-
-        query = 'SELECT * FROM items'
-        result = cr.execute(query)
-        items = []
-
-        for row in result:
-            items.append({
-                'name': row[0],
-                'price': row[1]
-            })
-
-        con.close()
-        return {'items': items}, 200
+        return {'items': [item.json() for item in ItemModel.query.all()]}, 200
