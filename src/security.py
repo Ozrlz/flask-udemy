@@ -5,7 +5,7 @@ from pdb import set_trace as debug
 
 def authenticate(username, passwd):
     user = UserModel.find_by_username(username)
-    if user and safe_str_cmp(user.passwd, passwd):
+    if user and safe_str_cmp(user.password, passwd):
         return user
 
 def identity(payload):
