@@ -26,13 +26,6 @@ class UserRegister(Resource):
         payload = cls.parser.parse_args()
         if UserModel.find_by_username(payload.get('username')):
             return {"message": "A user with name {} already exists".format(payload.get('username'))}
-        con = sqlite3.connect(DATABASE_NAME)
-        cr = con.cursor()
 
-        query = "INSERT INTO users VALUES (NULL, ?, ?)"
-        cr.execute(query, (payload.get('username'), payload.get('password')))
-        
-        con.commit()
-        con.close()
-
+        user = UserModel(**payload)
         return {"message": "User created"}
