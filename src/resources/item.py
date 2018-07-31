@@ -11,6 +11,11 @@ class Item(Resource):
         required=True,
         help="This field cannot be left blank!"
     )
+    parser.add_argument('store_id',
+        type=int,
+        required=True,
+        help="Every item needs a store id"
+    )
 
     @jwt_required()
     def get(self, name):
@@ -22,7 +27,7 @@ class Item(Resource):
             return {"message": "An item with the name {} already exists".format(name)}, 400
         
         payload = Item.parser.parse_args()
-        item = ItemModel(name, payload.get('price') )
+        item = ItemModel(name, **payload)
         try:
             item.save_to_db()
         except:
@@ -41,7 +46,7 @@ class Item(Resource):
         payload = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
         if item is None:
-            item = ItemModel(name, payload.get('price'))
+            item = ItemModel(name, **payload)
         else:
             item.price = payload.get('price')
 
