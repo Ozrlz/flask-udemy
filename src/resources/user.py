@@ -23,4 +23,5 @@ class UserRegister(Resource):
             return {"message": "A user with name {} already exists".format(payload.get('username'))}
 
         user = UserModel(**payload)
+        user.save_to_db()
         return {"message": "User created"}
