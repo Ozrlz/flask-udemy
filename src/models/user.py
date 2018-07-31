@@ -1,45 +1,39 @@
-from os import environ
-import sqlite3
 from db import db
-
-DATABASE_NAME = environ.get('DATABASE_NAME')  
 
 class UserModel(db.Model):
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80)) # 80 Chars at most
-    passwd = db.Column(db.String(80))
+    password = db.Column(db.String(80))
 
-    def __init__(self, _id, username, passwd):
-        self.id = _id
+    def __init__(self, username, passwd):
         self.username = username
-        self.passwd = passwd
+        self.password = passwd
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 
     @classmethod
     def find_by_username(cls, username):
-        connection = sqlite3.connect(DATABASE_NAME)
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM users WHERE username = ?"
-        result = cursor.execute(query, (username,) )
-        row = result.fetchone()
-        user = cls(*row) if row else None
-        
-        connection.close()
-
-        return user
+        '''
+        Args:
+            cls -> The current class
+            username(str): The name of the user
+        Returns:
+            An UserModel object if found
+        '''
+        return cls.query.filter_by(username=username).first()
 
     @classmethod
     def find_by_id(cls, _id):
-        connection = sqlite3.connect(DATABASE_NAME)
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM users WHERE id = ?"
-        result = cursor.execute(query, (_id,))
-        row = result.fetchone()
-        user = cls(*row) if row else None
-
-        connection.close()
-        return user
+        '''
+        Args:
+            cls -> The current class
+            _id(str): The id of the User
+        Returns:
+            An ItemModel object if found
+        '''
+        return cls.query.filter_by(id=_id).first()
 
