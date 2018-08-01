@@ -10,8 +10,9 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
-FLASK_PORT = environ.get('FLASK_PORT')
-DATABASE_NAME = environ.get('DATABASE_NAME')
+HEROKU_PORT = environ.get('PORT')
+FLASK_PORT = environ.get('FLASK_PORT', HEROKU_PORT)
+DATABASE_NAME = environ.get('DATABASE_NAME', 'test.db')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DATABASE_NAME
