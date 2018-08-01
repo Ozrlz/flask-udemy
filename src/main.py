@@ -20,6 +20,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super_secret_key'
 api = Api(app)
 
+api.add_resource(Item, '/item/<string:name>')
+api.add_resource(ItemList, '/items')
+api.add_resource(UserRegister, '/register')
+api.add_resource(Store, '/store/<string:name>')
+api.add_resource(StoreList, '/stores')
+
 jwt = JWT(app, authenticate, identity) # /auth endpoint created
 
 
@@ -31,9 +37,4 @@ if __name__ == '__main__':
     @app.before_first_request
     def create_tables():
         db.create_all() 
-    api.add_resource(Item, '/item/<string:name>')
-    api.add_resource(ItemList, '/items')
-    api.add_resource(UserRegister, '/register')
-    api.add_resource(Store, '/store/<string:name>')
-    api.add_resource(StoreList, '/stores')
     app.run(port=FLASK_PORT, host='0.0.0.0', debug=True)
