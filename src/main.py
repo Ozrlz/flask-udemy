@@ -11,11 +11,12 @@ from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
 HEROKU_PORT = environ.get('PORT')
+HEROKU_DATABASE = environ.get('DATABASE_URL')
 FLASK_PORT = environ.get('FLASK_PORT', HEROKU_PORT)
 DATABASE_NAME = environ.get('DATABASE_NAME', 'test.db')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DATABASE_NAME
+app.config['SQLALCHEMY_DATABASE_URI'] = HEROKU_DATABASE or 'sqlite:///' + DATABASE_NAME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super_secret_key'
 api = Api(app)
