@@ -14,9 +14,12 @@ HEROKU_PORT = environ.get('PORT')
 HEROKU_DATABASE = environ.get('DATABASE_URL')
 FLASK_PORT = environ.get('FLASK_PORT', HEROKU_PORT)
 DATABASE_NAME = environ.get('DATABASE_NAME', 'test.db')
+PSQL_USR = environ.get('POSTGRES_USER')
+PSQL_PASSWD = environ.get('POSTGRES_PASSWORD')
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = HEROKU_DATABASE or 'sqlite:///' + DATABASE_NAME
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://flask:flask@db:5432/test01'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super_secret_key'
 api = Api(app)

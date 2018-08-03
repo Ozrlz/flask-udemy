@@ -13,3 +13,16 @@ services:
       - "5000:5000"
     volumes:
       - ./src:/home/app/
+    depends_on:
+      - db
+  db:
+    container_name: ${PROJECT_NAME}_db
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - flask-db-data:/var/lib/postgresql/data/pgdata
+volumes:
+  flask-db-data:
