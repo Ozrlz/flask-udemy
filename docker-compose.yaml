@@ -1,20 +1,27 @@
 version: '2.2'
 services:
+  proxy:
+    container_name: ${PROJECT_NAME}_proxy
+    image: ${PROJECT_NAME}_proxy:${RELEASE_VERSION}
+    build: build/proxy
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      - web
   web:
     container_name: ${PROJECT_NAME}_web
     image: ${PROJECT_NAME}_web:${RELEASE_VERSION}
-    build:
-      dockerfile: Dockerfile
-      context: .
+    build: build/web
     environment:
       - FLASK_PORT=${FLASK_PORT:-5000}
       - DATABASE_NAME=${DATABASE_NAME:-test.db}
-    ports:
-      - "5000:5000"
     volumes:
-      - ./src:/home/app/
+      - ./src:/home/app/src
     depends_on:
       - db
+    # ports:
+    #   - "5001:5001"
   db:
     container_name: ${PROJECT_NAME}_db
     image: postgres:9.6
