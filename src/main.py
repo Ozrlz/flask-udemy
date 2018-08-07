@@ -10,16 +10,16 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
-HEROKU_PORT = environ.get('PORT')
-HEROKU_DATABASE = environ.get('DATABASE_URL')
-FLASK_PORT = environ.get('FLASK_PORT', HEROKU_PORT)
+FLASK_PORT = environ.get('FLASK_PORT')
 DATABASE_NAME = environ.get('DATABASE_NAME', 'test.db')
 PSQL_USR = environ.get('POSTGRES_USER')
 PSQL_PASSWD = environ.get('POSTGRES_PASSWORD')
+PSQL_PORT = environ.get('POSTGRES_PORT')
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://flask:flask@db:5432/test01'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://' + \
+    PSQL_USR + ':' + PSQL_PASSWD + '@db:' + PSQL_PORT + '/' + DATABASE_NAME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super_secret_key'
 api = Api(app)

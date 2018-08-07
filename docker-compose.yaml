@@ -16,6 +16,10 @@ services:
     environment:
       - FLASK_PORT=${FLASK_PORT:-5000}
       - DATABASE_NAME=${DATABASE_NAME:-test.db}
+      - POSTGRES_USER=${POSTGRES_USER}      
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+
     volumes:
       - ./src:/home/app/src
     depends_on:
