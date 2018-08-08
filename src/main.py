@@ -21,6 +21,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://' + \
     PSQL_USR + ':' + PSQL_PASSWD + '@db:' + PSQL_PORT + '/' + DATABASE_NAME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PROPAGATE_EXCEPTIONS'] = True # Propagates all the JWT exceptions 
+# raised, not only the flask ones
 app.secret_key = 'super_secret_key'
 api = Api(app)
 
