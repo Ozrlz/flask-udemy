@@ -1,15 +1,5 @@
 version: '2.2'
 services:
-  proxy:
-    container_name: ${PROJECT_NAME}_proxy
-    image: ${PROJECT_NAME}_proxy:${RELEASE_VERSION}
-    build: build/proxy
-    ports:
-      - "5000:5000"
-      - "5001:5001"
-      - "5002:5002"
-    depends_on:
-      - web
   web:
     container_name: ${PROJECT_NAME}_web
     image: ${PROJECT_NAME}_web:${RELEASE_VERSION}
@@ -25,8 +15,8 @@ services:
       - ./src:/home/app/src
     depends_on:
       - db
-    # ports:
-    #   - "5001:5001"
+    ports:
+      - "5000:5000"
   db:
     container_name: ${PROJECT_NAME}_db
     image: postgres:9.6

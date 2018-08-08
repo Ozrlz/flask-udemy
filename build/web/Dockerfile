@@ -7,8 +7,7 @@ RUN mkdir /home/app && pip install -r /requirements.txt && apt update && \
 
 USER flask
 WORKDIR /home/app
-ADD uwsgi.ini .
 
-EXPOSE 5000 5001
+EXPOSE 5000
 
-CMD ["uwsgi", "--master", "--emperor", "uwsgi.ini", "--die-on-term", "--uid", "flask", "--gid", "flask"]
+CMD ["python", "src/main.py"]
