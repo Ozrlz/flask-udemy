@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required, get_jwt_claims, jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_claims, jwt_required, jwt_optional, get_jwt_identity
 
 from models.item import ItemModel
 
@@ -61,5 +61,13 @@ class Item(Resource):
 
 class ItemList(Resource):
     
+    @jwt_optional
     def get(self):
-        return {'items': [item.json() for item in ItemModel.find_all()]}, 200
+        user_id = get_jwt_identity()
+        items = [item.json() for item in ItemModel.find_all()]
+        if user_id:
+            return {'items': items}, 200
+        return {
+            'items': [item.get('name') for item in items],
+            'message': 'More data available if you log in.'
+        }, 200
