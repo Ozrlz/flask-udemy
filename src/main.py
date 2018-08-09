@@ -32,7 +32,7 @@ api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
-api.add_resource(User, '/user<int:user_id>')
+api.add_resource(User, '/user/<int:user_id>')
 
 jwt = JWT(app, authenticate, identity) # /auth endpoint created
 
