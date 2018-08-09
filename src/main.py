@@ -37,6 +37,13 @@ api.add_resource(UserLogin, '/login')
 
 jwt = JWTManager(app)
 
+@jwt.user_claims_loader
+def add_claims_to_jwt(identity):
+    if identity == 1:
+        return {'is_admin': True}
+    return 
+    return {'is_admin': False}
+
 
 
 if __name__ == '__main__':
