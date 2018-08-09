@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager
 from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
-from resources.user import User, UserLogin
+from resources.user import User, UserLogin, TokenRefresh
 
 FLASK_PORT = environ.get('FLASK_PORT')
 DATABASE_NAME = environ.get('DATABASE_NAME', 'test.db')
@@ -34,6 +34,7 @@ api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 api.add_resource(User, '/user/<int:user_id>')
 api.add_resource(UserLogin, '/login')
+api.add_resource(TokenRefresh, '/refresh')
 
 jwt = JWTManager(app)
 
