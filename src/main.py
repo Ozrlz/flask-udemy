@@ -9,6 +9,7 @@ from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
+from resources.user import User
 
 FLASK_PORT = environ.get('FLASK_PORT')
 DATABASE_NAME = environ.get('DATABASE_NAME', 'test.db')
@@ -31,6 +32,7 @@ api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
+api.add_resource(User, '/user<int:user_id>')
 
 jwt = JWT(app, authenticate, identity) # /auth endpoint created
 
