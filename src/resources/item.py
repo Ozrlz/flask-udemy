@@ -1,6 +1,12 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required, get_jwt_claims, jwt_required, jwt_optional, get_jwt_identity
-
+from flask_jwt_extended import (jwt_required,
+        get_jwt_claims,
+        jwt_required,
+        jwt_optional,
+        get_jwt_identity,
+        fresh_jwt_required
+    )
+    
 from models.item import ItemModel
 
 class Item(Resource):
@@ -22,6 +28,7 @@ class Item(Resource):
         item = ItemModel.find_by_name(name)        
         return item.json() if item else {'mesage': 'An item with a name {} did not exists'.format(name)}
 
+    @fresh_jwt_required
     def post(self, name):
         if ItemModel.find_by_name(name):
             return {"message": "An item with the name {} already exists".format(name)}, 400
