@@ -1,6 +1,6 @@
 from os import environ
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import  Api, reqparse
 from pdb import set_trace as debug
 from flask_jwt_extended import JWTManager
@@ -45,6 +45,40 @@ def add_claims_to_jwt(identity):
     return 
     return {'is_admin': False}
 
+@jwt.expired_token_loader
+def expired_token_callback(): # When the token they sent, has already expired
+    return jsonify({
+        'description': 'The token has expired',
+        'error': 'token_Expired'
+    }), 401
+
+@jwt.invalid_token_loader # When they send an invalid token
+def invalid_token_callback(error):
+    return jsonify({
+        'description': 'Signature verification failed',
+        'error': 'invalid_token'
+    }), 401
+
+@jwt.unauthorized_loader # Whenever they don't send any token
+def missing_token_callback(error):
+    return jsonify({
+        'description': 'The request doesn\'t contain an acces token',
+        'error': 'authorization_required'
+    }), 401
+
+@jwt.needs_fresh_token_loader
+def token_not_fresh_callback():
+    return jsonify({
+        'description': 'The token is not fresh.',
+        'error': 'fresh_token_required'
+    }), 401
+
+@jwt.revoked_token_loader
+def revoked_token_callback():
+    return jsonify({
+        'description': 'The token has been revoked.',
+        'error': 'token_revoked'
+    }), 401
 
 
 if __name__ == '__main__':
