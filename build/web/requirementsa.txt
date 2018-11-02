@@ -1,0 +1,4 @@
+Flask-RESTful
+Flask-JWT-Extended
+Flask-SQLAlchemy
+psycopg2-binary
